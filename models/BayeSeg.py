@@ -119,8 +119,8 @@ class BayeSeg(nn.Module):
                     }
 
         #visualize = {'y': samples, 'n': n, 'm': m, 'rho': mu_rho_hat, 'x': x, 'upsilon': mu_upsilon_hat, 'z': z, 'omega': mu_omega_hat}
-        
-        out = {'pred_masks': mu_z, 'kl_y':kl_y,
+        pred = z if self.training else mu_z
+        out = {'pred_masks': pred, 'kl_y':kl_y,
                'kl_mu_z':kl_mu_z, 'kl_sigma_z':kl_sigma_z,
                'kl_mu_x':kl_mu_x, 'kl_sigma_x':kl_sigma_x,
                'kl_mu_m':kl_mu_m, 'kl_sigma_m':kl_sigma_m,
