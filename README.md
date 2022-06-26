@@ -107,8 +107,8 @@ If our work is helpful in your research, please cite this as follows.
 @Article{Gao/BayeSeg/2022,
 	title =	 {Joint Modeling of Image and Label Statistics for Enhancing Model Generalizability of Medical Image Segmentation},
 	author = {Gao, Shangqi and Zhou, Hangqi and Gao, Yibo and Zhuang, Xiahai},
-    journal = {	arXiv e-print, arXiv:2206.04336},
-    year = 2022
+  journal = {	arXiv e-print, arXiv:2206.04336},
+  year = 2022
 }
 ```
 
