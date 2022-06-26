@@ -14,13 +14,13 @@ CUDA_VISIBLE_DEVICES=2 nohup python -u main.py --model BayeSeg --batch_size 8 --
 CUDA_VISIBLE_DEVICES=2 nohup python -u main.py --model BayeSeg --batch_size 8 --output_dir logs/BayeSeg --device cuda >train.log 2>&1 &
 
 # test Unet
-#CUDA_VISIBLE_DEVICES=3 python -u main.py --model Unet --eval --dataset MSCMR --sequence LGR --resume logs/Unet_zk/best_checkpoint.pth --output_dir results/MSCMR_dataset/test/Unet/T2 --device cuda --GPU_ids 3
+#CUDA_VISIBLE_DEVICES=3 python -u main.py --model Unet --eval --dataset MSCMR --sequence LGR --resume logs/Unet/checkpoint.pth --output_dir results --device cuda
 
 # test PUnet
-#CUDA_VISIBLE_DEVICES=3 python -u main.py --model PUnet --eval --dataset MSCMR --sequence LGR --resume logs/PUnet/best_checkpoint.pth --output_dir results/MSCMR_dataset/test/PUnet/LGE --device cuda --GPU_ids 3
+#CUDA_VISIBLE_DEVICES=3 python -u main.py --model PUnet --eval --dataset MSCMR --sequence LGR --resume logs/PUnet/checkpoint.pth --output_dir results --device cuda
 
 # test baseline
-#CUDA_VISIBLE_DEVICES=3 python -u main.py --model BayeSeg --eval --dataset MSCMR --sequence LGR --resume logs/baseline/best_checkpoint.pth --output_dir results/MSCMR_dataset/test/baseline/T2 --device cuda --GPU_ids 3
+#CUDA_VISIBLE_DEVICES=3 python -u main.py --model BayeSeg --eval --dataset MSCMR --sequence LGR --resume logs/Baseline/checkpoint.pth --output_dir results --device cuda
 
 # test BayeSeg
-#CUDA_VISIBLE_DEVICES=3 python -u main.py --model BayeSeg --eval --dataset MSCMR --sequence LGR --resume logs/BayeSeg1-6-8-100/checkpoint1799.pth --output_dir results/ACDC/test/BayeSeg --device cuda --GPU_ids 3
+#CUDA_VISIBLE_DEVICES=3 python -u main.py --model BayeSeg --eval --dataset MSCMR --sequence LGR --resume logs/BayeSeg/checkpoint.pth --output_dir results --device cuda
