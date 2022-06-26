@@ -3,8 +3,8 @@ from argparse import ArgumentParser
 def add_experiment_args(parser: ArgumentParser) -> None:
     # define task, label values, and output channels
     tasks = {
-        #'MR': {'lab_values': [0, 600, 200, 500], 'out_channels': 4}
-        'MR': {'lab_values': [0, 1, 2, 3, 4, 5], 'out_channels': 4}
+        'MR': {'lab_values': [0, 600, 200, 500], 'out_channels': 4}
+        #'MR': {'lab_values': [0, 1, 2, 3, 4, 5], 'out_channels': 4}
         }
     
     # Experiment
@@ -19,8 +19,10 @@ def add_experiment_args(parser: ArgumentParser) -> None:
     
     # Model parameters    
     parser.add_argument('--model', default='BayeSeg', required=False)
-    parser.add_argument('--dataset', default='MSCMR_dataset', type=str,
+    parser.add_argument('--dataset', default='MSCMR', type=str,
                         help='multi-sequence CMR segmentation dataset')
+    parser.add_argument('--sequence', default='LGR', type=str,
+                        help='which CMR sequence')
     parser.add_argument('--frozen_weights', type=str, default=None,
                         help="Path to the pretrained model. If set, only the mask head will be trained")
     parser.add_argument('--in_channels', default=1, type=int)

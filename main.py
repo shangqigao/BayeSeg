@@ -104,8 +104,8 @@ def main(args):
 
     if args.eval:
         #test_stats = evaluate(model, criterion, postprocessors, dataloader_val_dict, device, args.output_dir, visualizer, 0, writer)
-        #test_df = infer(model, args.model, dataloader_val_dict, args.output_dir, device)
-        test_df = visual(model, args.model, dataloader_val_dict, args.output_dir, device)
+        test_df = infer(model, args.model, args.dataset, args.sequence, dataloader_val_dict, args.output_dir, device)
+        #test_df = visual(model, args.model, dataloader_val_dict, args.output_dir, device)
     else:
         logger.info("Start training")
         best_dic = None

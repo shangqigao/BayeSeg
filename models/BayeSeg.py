@@ -244,7 +244,7 @@ def build(args):
     model = BayeSeg(args, freeze_whst=(args.frozen_weights is not None))
     weight_dict = {
         'loss_CrossEntropy': args.CrossEntropy_loss_coef,
-#        'loss_AvgDice': args.AvgDice_loss_coef,  
+        # 'loss_AvgDice': args.AvgDice_loss_coef,  
         'loss_Bayes':args.Bayes_loss_coef,
     }
     losses = ['CrossEntropy','AvgDice','Bayes']

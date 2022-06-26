@@ -1,0 +1,15 @@
+einops==0.4.0
+matplotlib==3.3.4
+MedPy==0.4.0
+nibabel==3.2.2
+numpy==1.19.2
+pandas==1.1.5
+Pillow==8.4.0
+scikit-image==0.17.2
+SimpleITK==2.1.1
+tensorboardX==2.4.1
+torch==1.10.2
+torchaudio==0.10.2
+torchvision==0.11.3
+tqdm==4.62.3
+typing-extensions==3.10.0.2

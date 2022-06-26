@@ -98,20 +98,21 @@ def keep_largest_connected_components(mask):
     return final_img
 
 @torch.no_grad()
-def infer(model, model_type, dataloader_dict, output_folder, device):
+def infer(model, model_type, dataset, sequence, dataloader_dict, output_folder, device):
     model.eval()
     #criterion.eval()
     
-    dataset = 'ACDC'
+    #dataset = 'MSCMR'
     if dataset == 'MSCMR':
-        test_folder = "../Datasets/MSCMR_dataset/test/LGR/images/"
-        label_folder = "../Datasets/MSCMR_dataset/test/LGR/labels/"
+        test_folder = "../Datasets/MSCMR_dataset/test/{}/images/".format(sequence)
+        label_folder = "../Datasets/MSCMR_dataset/test/{}/labels/".format(sequence)
     elif dataset == 'ACDC':
         test_folder = "../nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task027_ACDC/imagesTr" 
         label_folder = "../nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task027_ACDC/labelsTr"
     else:
         raise ValueError('Invalid dataset: {}'.format(dataset))
-
+    
+    output_folder = os.path.join(output_folder, dataset, 'test', str(model_type), sequence)
     if os.path.exists(output_folder):
         shutil.rmtree(output_folder)
     makefolder(output_folder)

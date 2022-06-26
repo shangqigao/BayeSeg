@@ -120,7 +120,7 @@ def make_transforms(image_set):
 
 
 def build(image_set, args):
-    root = Path('/home/gaoshangqi/Segmentation/Datasets/' + args.dataset)
+    root = Path('/home/gaoshangqi/Segmentation/Datasets/' + args.dataset + '/' + args.sequence)
     assert root.exists(), f'provided MSCMR path {root} does not exist'
     PATHS = {
         "train": (root / "train" / "images", root / "train" / "labels"),
