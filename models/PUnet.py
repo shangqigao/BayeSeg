@@ -227,7 +227,10 @@ class ProbabilisticUnet(nn.Module):
         
         reg_loss = l2_regularisation(self.posterior) + l2_regularisation(self.prior) + l2_regularisation(self.fcomb.layers)
 
-        return {'pred_masks':self.sample(not training)}#, 'elbo':self.elbo(segm), 'reg_loss': reg_loss}
+        if training:
+            return {'pred_masks':self.sample(not training), 'elbo':self.elbo(segm), 'reg_loss': reg_loss}
+        else:
+            return {'pred_masks':self.sample(not training)}
 
     def sample(self, testing=False):
         """

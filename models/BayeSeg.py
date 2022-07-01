@@ -1,3 +1,4 @@
+from cmath import e
 import torch
 import torchvision
 import torch.nn as nn
@@ -29,7 +30,7 @@ class BayeSeg(nn.Module):
         self.res_clean = ResNet(num_out_ch = 2)
         self.res_noise = ResNet(num_out_ch = 2, num_block=6, bn=True) #推断噪声的话，也许加BN的效果会更好一些？
         # pred mu and log var unit for seg_masks: B x K x W x H
-        self.unet = Unet(out_ch = 8)
+        self.unet = Unet(args, out_ch = 8)
         
         # postprecess
         self.softmax = nn.Softmax(dim=1)
@@ -242,11 +243,18 @@ class Visualization(nn.Module):
 def build(args):
     device = torch.device(args.device)
     model = BayeSeg(args, freeze_whst=(args.frozen_weights is not None))
-    weight_dict = {
-        'loss_CrossEntropy': args.CrossEntropy_loss_coef,
-        # 'loss_AvgDice': args.AvgDice_loss_coef,  
-        'loss_Bayes':args.Bayes_loss_coef,
-    }
+    if args.model == 'Baseline':
+        weight_dict = {
+            'loss_CrossEntropy': args.CrossEntropy_loss_coef,
+            # 'loss_AvgDice': args.AvgDice_loss_coef,  
+            # 'loss_Bayes':args.Bayes_loss_coef,
+        }
+    else:
+        weight_dict = {
+            'loss_CrossEntropy': args.CrossEntropy_loss_coef,
+            # 'loss_AvgDice': args.AvgDice_loss_coef,  
+            'loss_Bayes':args.Bayes_loss_coef,
+        }
     losses = ['CrossEntropy','AvgDice','Bayes']
     criterion = SetCriterion(losses=losses, weight_dict=weight_dict, args=args)
     criterion.to(device)

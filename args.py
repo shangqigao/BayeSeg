@@ -3,8 +3,8 @@ from argparse import ArgumentParser
 def add_experiment_args(parser: ArgumentParser) -> None:
     # define task, label values, and output channels
     tasks = {
-        'MR': {'lab_values': [0, 600, 200, 500], 'out_channels': 4}
-        #'MR': {'lab_values': [0, 1, 2, 3, 4, 5], 'out_channels': 4}
+        # 'MR': {'lab_values': [0, 600, 200, 500], 'out_channels': 4}
+        'MR': {'lab_values': [0, 1, 2, 3], 'out_channels': 4}
         }
     
     # Experiment
@@ -29,7 +29,7 @@ def add_experiment_args(parser: ArgumentParser) -> None:
     
     # loss weight
     parser.add_argument('--CrossEntropy_loss_coef', default = 1, type=float)
-    parser.add_argument('--AvgDice_loss_coef', default = 1, type=float)
+    parser.add_argument('--AvgDice_loss_coef', default = -1, type=float)
     parser.add_argument('--Bayes_loss_coef', default = 100, type=float)
     
     

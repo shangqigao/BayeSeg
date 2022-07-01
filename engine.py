@@ -6,6 +6,7 @@ import datetime
 from typing import Iterable
 
 import torch
+from models.BayeSeg import BayeSeg
 import util.misc as utils
 import logging
 
@@ -28,7 +29,7 @@ def mix_targets(samples, targets, device):
     target_masks = torch.stack(masks)
     shp_y = target_masks.shape
     target_masks = target_masks.long()
-    y_onehot = torch.zeros((shp_y[0], 5, shp_y[2], shp_y[3]))
+    y_onehot = torch.zeros((shp_y[0], 4, shp_y[2], shp_y[3]))
     if target_masks.device.type == "cuda":
         y_onehot = y_onehot.cuda(target_masks.device.index)
     y_onehot.scatter_(1, target_masks, 1).float()
@@ -41,7 +42,7 @@ def convert_targets(targets, device):
     target_masks = torch.stack(masks)
     shp_y = target_masks.shape
     target_masks = target_masks.long()
-    y_onehot = torch.zeros((shp_y[0], 5, shp_y[2], shp_y[3]))
+    y_onehot = torch.zeros((shp_y[0], 4, shp_y[2], shp_y[3]))
     if target_masks.device.type == "cuda":
         y_onehot = y_onehot.cuda(target_masks.device.index)
     y_onehot.scatter_(1, target_masks, 1).float()
@@ -75,10 +76,10 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
         targets = [{k: v.to(device) for k, v in t.items() if not isinstance(v, str)} for t in targets]
 
         ## original
-        targets_onehot= convert_targets(targets,device)
+        targets_onehot= convert_targets(targets, device)
         ##
-
-        outputs = model(samples.tensors, task)
+        second = task if model.args.model in ['Unet', 'BayeSeg', 'Baseline'] else targets_onehot
+        outputs = model(samples.tensors, second)
         loss_dict = criterion(outputs, targets_onehot)
         weight_dict = criterion.weight_dict
         losses = sum([loss_dict[k] * weight_dict[k] for k in loss_dict.keys() if k in weight_dict.keys()])
@@ -143,8 +144,9 @@ def evaluate(model, criterion, postprocessors, dataloader_dict, device, output_d
         samples = samples.to(device)
         targets = [{k: v.to(device) for k, v in t.items() if not isinstance(v, str)} for t in targets]
 
-        targets_onehot= convert_targets(targets,device)
-        outputs = model(samples.tensors, task)
+        targets_onehot= convert_targets(targets, device)
+        second = task if model.args.model in ['Unet', 'BayeSeg', 'Baseline'] else targets_onehot
+        outputs = model(samples.tensors, second)
 
         loss_dict = criterion(outputs, targets_onehot)
         weight_dict = criterion.weight_dict
@@ -179,10 +181,11 @@ def evaluate(model, criterion, postprocessors, dataloader_dict, device, output_d
     logger.info("Averaged stats:") 
     logger.info(metric_logger)
     stats = {k: meter.global_avg for k, meter in metric_logger.meters.items()}
-    writer.add_scalar('avg_loss_AvgDice', stats['loss_AvgDice'], epoch)
     writer.add_scalar('avg_loss_total', stats['loss'], epoch)
-    writer.add_scalar('avg_loss_CrossEntropy', stats['loss_CrossEntropy'], epoch)
-    writer.add_scalar('avg_loss_Bayes', stats['loss_Bayes'], epoch)
-    visualizer(torch.stack(sample_list), torch.stack(output_list), torch.stack(target_list), outputs['visualize'], epoch, writer)
+    writer.add_scalar('avg_loss_AvgDice', stats['loss_AvgDice'], epoch)
+    if model.args.model in ['BayeSeg', 'Baseline']:
+        writer.add_scalar('avg_loss_CrossEntropy', stats['loss_CrossEntropy'], epoch)
+        writer.add_scalar('avg_loss_Bayes', stats['loss_Bayes'], epoch)
+        visualizer(torch.stack(sample_list), torch.stack(output_list), torch.stack(target_list), outputs['visualize'], epoch, writer)
     
     return stats

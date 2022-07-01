@@ -23,18 +23,18 @@ BayeSeg was tested on the public datasets from [MICCAI 2017 ACDC](https://acdc.c
 
 |Datasets/Models|Parameters|BaiduPan|OneDrive|
 |-----|-------|--------|--------|
-|ACDC |       |[link](https://acdc.creatis.insa-lyon.fr/#)|[link](https://acdc.creatis.insa-lyon.fr/#)|
-|MS-CMRSeg|   |[link]()|[link]()|
-|Unet   |     |[link]()|[link]()|
-|PUnet  |     |[link]()|[link]()|
-|Baseline|    |[link]()|[link]()|
-|BayeSeg|     |[link]()|[link]()|
+|ACDC |  -     |[link](https://acdc.creatis.insa-lyon.fr/#)|[link](https://acdc.creatis.insa-lyon.fr/#)|
+|MS-CMRSeg|-   |[link](https://pan.baidu.com/s/1MlrRxYhmp9CRabgn0AeFog) `s4t8`|[link](https://1drv.ms/u/s!AuJaQmQJN4arhGcbso7reViO9rF1?e=a3YCn2)|
+|Unet   |25.8M |[link](https://pan.baidu.com/s/1LM0GeP80QO73hqEHbZQxqg) `1zgr`|[link](https://1drv.ms/u/s!AuJaQmQJN4arhGtwFDVlfny5HbrS?e=vPk51I)|
+|PUnet  |5.0M  |[link](https://pan.baidu.com/s/1mCzlgRHdfCCsBYuEy1fleg) `07rm`|[link](https://1drv.ms/u/s!AuJaQmQJN4arhGgzZZAmMclhx9mi?e=tt6nmr)|
+|Baseline|26.9M|[link](https://pan.baidu.com/s/1IuBEnsiLAnmqOJqst64vrQ) `1i7y`|[link](https://1drv.ms/u/s!AuJaQmQJN4arhGk1KUA6DlCSzfnJ?e=l8Wwkx)|
+|BayeSeg|26.9M |[link](https://pan.baidu.com/s/1C3EqfR3fFnF0D0pfTMoiwA) `0an5`|[link](https://1drv.ms/u/s!AuJaQmQJN4arhGr7ty9owsE9gCEK?e=P8qjy6)|
 
 - `ACDC` comes from MICCAI 2017 ACDC, one needs to download it from its official homepage.
-- `MS-CMRSeg.zip` contains three sequences, i.e., C0 (bSSFP CMR), LGR (LGE CMR), and T2 (T2-weighted CMR), and each sequence consists of train, val, and test datasets. For example, LGR is comprised of the following three datasets:
+- `MS-CMRSeg.zip` contains three folders, i.e., train, val, and test. 
   - `train` contains 25 subjects randomly selected from LGE CMR of MS-CMRSeg
   - `val` contains 5 subjects randomly selected from LGE CMR of MS-CMRSeg
-  - `test` contains 15 subjects randomly selected from LGE CMR of MS-CMRSeg
+  - `test` contains three sequences, i.e., C0 (bSSFP CMR), LGR (LGE CMR), and T2 (T2-weighted CMR), and each sequence consists of 15 subjects randomly selected from MS-CMRSeg. 
 - `Unet.zip` contains the checkpoint of U-Net model, which was trained on LGE CMR using cross-entropy.
 - `PUnet.zip` contains the checkpoint of PU-Net model, which was trained on LGE CMR using its default loss.
 - `Baseline.zip` contains the checkpoint of Baseline model, which was trained on LGE CMR only using cross-entropy.
@@ -44,7 +44,7 @@ We have provided the script of testing U-Net, PU-Net, Baseline, and BayeSeg in `
 
 The setting of test directory is defined in `inference.py` as follows,
 ```python
-if dataset == 'MSCMR' or dataset == 'ACDC':
+if dataset in ['MSCMR', 'ACDC']:
     test_folder = "../Datasets/{}/test/{}/images/".format(dataset, sequence)
     label_folder = "../Datasets/{}/test/{}/labels/".format(dataset, sequence)
 else:
@@ -55,48 +55,39 @@ For ACDC, one need to download this dataset from its homepage, and then prepare 
 To test the performance of U-Net, PU-Net, Baseline, and BayeSeg on the LGE CMR of MS-CMRSeg, please uncomment the corresponding line in `demo.sh`, and then run `sh demo.sh`.
 ```bash
 # test Unet
-#CUDA_VISIBLE_DEVICES=3 python -u main.py --model Unet --eval --dataset MSCMR --sequence LGR --resume logs/Unet/checkpoint.pth --output_dir results --device cuda
+# CUDA_VISIBLE_DEVICES=0 python -u main.py --model Unet --eval --dataset MSCMR --sequence LGR --resume logs/Unet/checkpoint.pth --output_dir results --device cuda
 
 # test PUnet
-#CUDA_VISIBLE_DEVICES=3 python -u main.py --model PUnet --eval --dataset MSCMR --sequence LGR --resume logs/PUnet/checkpoint.pth --output_dir results --device cuda
+# CUDA_VISIBLE_DEVICES=0 python -u main.py --model PUnet --eval --dataset MSCMR --sequence LGR --resume logs/PUnet/checkpoint.pth --output_dir results --device cuda
 
 # test baseline
-#CUDA_VISIBLE_DEVICES=3 python -u main.py --model BayeSeg --eval --dataset MSCMR --sequence LGR --resume logs/baseline/checkpoint.pth --output_dir results --device cuda
+# CUDA_VISIBLE_DEVICES=0 python -u main.py --model Baseline --eval --dataset MSCMR --sequence LGR --resume logs/Baseline/checkpoint.pth --output_dir results --device cuda
 
 # test BayeSeg
-#CUDA_VISIBLE_DEVICES=3 python -u main.py --model BayeSeg --eval --dataset MSCMR --sequence LGR --resume logs/BayeSeg/checkpoint.pth --output_dir results --device cuda
-
+# CUDA_VISIBLE_DEVICES=0 python -u main.py --model BayeSeg --eval --dataset MSCMR --sequence LGR --resume logs/BayeSeg/checkpoint.pth --output_dir results --device cuda
 ```
 Here, `--sequence` can be set to C0, LGR, or T2 for MS-CMRSeg, and C0 for ACDC. For example, to test the cross-sequence segmentation performance of U-Net, PU-Net, Baseline, and BayeSeg on the T2-weighted CMR of MS-CMRSeg, please set `--sequence LGR` to `--sequence T2`.
 
 ## How to train
 All models were trained using LGE CMR of MS-CMRSeg, and the root of training data is defined in `data/mscmr.py` as follows,
 ```python
-root = Path('your/dataset/directory' + args.dataset + '/' + args.sequence)
+root = Path('your/dataset/directory' + args.dataset)
 ```
 Please replace `your/dataset/directory` with your own directory.
 
 To train U-Net, PU-Net, Baseline, and BayeSeg, please uncomment the corresponding line in `demo.sh`, and run `sh demo.sh`.
 ```bash
 # train Unet
-CUDA_VISIBLE_DEVICES=2 nohup python -u main.py --model Unet --batch_size 8 --output_dir logs/Unet --device cuda >train.log 2>&1 &
+# CUDA_VISIBLE_DEVICES=0 python -u main.py --model Unet --batch_size 8 --output_dir logs/Unet --device cuda
 
 # train PUnet
-CUDA_VISIBLE_DEVICES=2 nohup python -u main.py --model PUnet --batch_size 8 --output_dir logs/PUnet --device cuda >train.log 2>&1 &
+# CUDA_VISIBLE_DEVICES=0 python -u main.py --model PUnet --batch_size 8 --output_dir logs/PUnet --device cuda
 
 # train Baseline
-CUDA_VISIBLE_DEVICES=2 nohup python -u main.py --model BayeSeg --batch_size 8 --output_dir logs/Baseline --device cuda >train.log 2>&1 &
+# CUDA_VISIBLE_DEVICES=0 python -u main.py --model Baseline --batch_size 8 --output_dir logs/Baseline --device cuda
 
 # train BayeSeg
-CUDA_VISIBLE_DEVICES=2 nohup python -u main.py --model BayeSeg --batch_size 8 --output_dir logs/BayeSeg --device cuda >train.log 2>&1 &
-```
-Note that, to train the Baseline model, one need to comment `loss_Bayes` in `models/BayeSeg.py` as follows,
-```python
-weight_dict = {
-        'loss_CrossEntropy': args.CrossEntropy_loss_coef,
-        # 'loss_AvgDice': args.AvgDice_loss_coef,  
-        # 'loss_Bayes':args.Bayes_loss_coef,
-    }
+# CUDA_VISIBLE_DEVICES=0 python -u main.py --model BayeSeg --batch_size 8 --output_dir logs/BayeSeg --device cuda
 ```
 
 ## Citation

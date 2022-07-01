@@ -10,6 +10,7 @@ class MSCMR(nn.Module):
     def __init__(self, args, freeze_whst=False):
         super().__init__()
 
+        self.args = args
         if freeze_whst:
             for p in self.parameters():
                 p.requires_grad_(False)
@@ -52,7 +53,7 @@ class SetCriterion(nn.Module):
         dice=(2*torch.sum((src_masks==1)*(targets_masks==1),(1, 2)).float())/(torch.sum(src_masks==1,(1, 2)).float()+torch.sum(targets_masks==1,(1, 2)).float()+1e-10)
         return {"Rv": dice.mean()}
 
-    def Avg(self, outputs, targets):
+    def loss_AvgDice(self, outputs, targets):
         src_masks = outputs["pred_masks"]
         src_masks = src_masks.argmax(1)
         targets_masks = targets.argmax(1)
@@ -60,7 +61,7 @@ class SetCriterion(nn.Module):
         for i in range(1,4,1):
             dice=(2*torch.sum((src_masks==i)*(targets_masks==i),(1, 2)).float())/(torch.sum(src_masks==i,(1, 2)).float()+torch.sum(targets_masks==i,(1, 2)).float()+1e-10)
             avg_dice += dice.mean()
-        return {"Avg": avg_dice/3}
+        return {"loss_AvgDice": avg_dice/3}
 
     def multiDice(self, outputs, targets, num_classes):
         multidice = []
@@ -108,7 +109,7 @@ class SetCriterion(nn.Module):
                     'Rv': self.Rv, 
                     'Lv': self.Lv, 
                     'Myo': self.Myo, 
-                    'Avg': self.Avg, 
+                    'AvgDice': self.loss_AvgDice, 
                     'CrossEntropy': self.loss_CrossEntropy,
                     }
         assert loss in loss_map, f'do you really want to compute {loss} loss?'
@@ -164,10 +165,10 @@ def build(args):
                    #'Rv': args.Rv,
                    #'Lv': args.Lv,
                    #'Myo': args.Myo,
-                   #'Avg': args.Avg,
+                   # 'loss_AvgDice': args.AvgDice_loss_coef,
                    'loss_CrossEntropy': args.CrossEntropy_loss_coef,
                    }
-    losses = ['multiDice', 'CrossEntropy','Rv','Lv','Myo','Avg']
+    losses = ['multiDice', 'CrossEntropy','Rv','Lv','Myo','AvgDice']
     criterion = SetCriterion(losses=losses, weight_dict=weight_dict, args=args)
     criterion.to(device)
     visualizer = Visualization()

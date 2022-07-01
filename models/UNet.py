@@ -43,9 +43,10 @@ class up_conv(nn.Module):
 
 class Unet(nn.Module):
 
-    def __init__(self, in_ch=1, out_ch=4):
+    def __init__(self, args, in_ch=1, out_ch=4):
         super(Unet, self).__init__()
 
+        self.args = args
         n1 = 64
         filters = [64, 128, 256, 512, 1024]
 
@@ -121,10 +122,12 @@ class Unet(nn.Module):
 
         d0 = self.Conv(d1)
         norm_out = self.Norm(d0)
-        #out = self.active(norm_out)
-        out = norm_out
+        if self.args.model == 'Unet':
+            out = self.active(norm_out)
+        else:
+            out = norm_out
 
         return out
 
 def build_UNet(args):
-    return  Unet(in_ch = 1,out_ch = 4)
+    return  Unet(args, in_ch = 1,out_ch = 4)

@@ -79,8 +79,8 @@ class mscmrSeg(data.Dataset):
         target_resolution = (1.36719, 1.36719)
         scale_vector = (pixel_size[0] / target_resolution[0],
                         pixel_size[1] / target_resolution[1])
-        #lab = np.asarray([(lab == v)*i for i, v in enumerate(self.lab_values)], np.int32)
-        #lab = np.sum(lab, 0)
+        # lab = np.asarray([(lab == v)*i for i, v in enumerate(self.lab_values)], np.int32)
+        # lab = np.sum(lab, 0)
         return [lab, scale_vector]
 
     def __len__(self):
@@ -120,7 +120,7 @@ def make_transforms(image_set):
 
 
 def build(image_set, args):
-    root = Path('/home/gaoshangqi/Segmentation/Datasets/' + args.dataset + '/' + args.sequence)
+    root = Path('/home/gaoshangqi/Segmentation/Datasets/' + args.dataset)
     assert root.exists(), f'provided MSCMR path {root} does not exist'
     PATHS = {
         "train": (root / "train" / "images", root / "train" / "labels"),

@@ -103,12 +103,9 @@ def infer(model, model_type, dataset, sequence, dataloader_dict, output_folder, 
     #criterion.eval()
     
     #dataset = 'MSCMR'
-    if dataset == 'MSCMR':
-        test_folder = "../Datasets/MSCMR_dataset/test/{}/images/".format(sequence)
-        label_folder = "../Datasets/MSCMR_dataset/test/{}/labels/".format(sequence)
-    elif dataset == 'ACDC':
-        test_folder = "../nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task027_ACDC/imagesTr" 
-        label_folder = "../nnUNet/nnUNet_raw_data_base/nnUNet_raw_data/Task027_ACDC/labelsTr"
+    if dataset in ['MSCMR', 'ACDC']:
+        test_folder = "../Datasets/{}/test/{}/images/".format(dataset, sequence)
+        label_folder = "../Datasets/{}/test/{}/labels/".format(dataset, sequence)
     else:
         raise ValueError('Invalid dataset: {}'.format(dataset))
     
@@ -145,7 +142,7 @@ def infer(model, model_type, dataset, sequence, dataloader_dict, output_folder, 
         img = img.astype(np.float32)
         img = np.divide((img - np.mean(img)), np.std(img))
         
-        print(img.shape, pixel_size)
+        # print(img.shape, pixel_size)
         slice_rescaleds = []
         for slice_index in range(img.shape[2]):
             img_slice = np.squeeze(img[:,:,slice_index])
@@ -193,10 +190,10 @@ def infer(model, model_type, dataset, sequence, dataloader_dict, output_folder, 
             tasks = dataloader_dict.keys()
             task = random.sample(tasks, 1)[0]
           
-            if model_type == 'BayeSeg' or model_type == 'Unet':
+            if model_type in ['BayeSeg', 'Unet', 'Baseline']:
                 outputs = model(img_slice, task)
             elif model_type == 'PUnet':
-                outputs = model(img_slice, task, training=False)
+                outputs = model(img_slice, None, training=False)
             else:
                 return ValueError('Invalid model: {}'.format(model_type))
             
