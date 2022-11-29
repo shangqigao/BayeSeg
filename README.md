@@ -1,5 +1,5 @@
 # BayeSeg
-The official implementation of "[Joint Modeling of Image and Label Statistics for Enhancing Model Generalizability of Medical Image Segmentation](https://arxiv.org/abs/2206.04336)", which has been accepted by MICCAI 2022.
+The official implementation of "[Joint Modeling of Image and Label Statistics for Enhancing Model Generalizability of Medical Image Segmentation](https://link.springer.com/chapter/10.1007/978-3-031-16443-9_35)", which has been accepted by MICCAI 2022.
 
 ## Content
 - [BayeSeg](#bayeseg)
