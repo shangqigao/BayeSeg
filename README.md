@@ -93,13 +93,15 @@ To train U-Net, PU-Net, Baseline, and BayeSeg, please uncomment the correspondin
 ## Citation
 If our work is helpful in your research, please cite this as follows.
 
-[1] S. Gao, H. Zhou, Y. Gao, and X. Zhuang, "Joint Modeling of Image and Label Statistics for Enhancing Model Generalizability of Medical Image Segmentation," arXiv e-print, arXiv:2206.04336, 2022. [[arXiv]](https://arxiv.org/abs/2206.04336) [[MICCAI]]()
+[1] S. Gao, H. Zhou, Y. Gao, and X. Zhuang, "Joint Modeling of Image and Label Statistics for Enhancing Model Generalizability of Medical Image Segmentation," arXiv e-print, arXiv:2206.04336, 2022. [[arXiv]](https://arxiv.org/abs/2206.04336) [[MICCAI]](https://link.springer.com/chapter/10.1007/978-3-031-16443-9_35)
 ```
-@Article{Gao/BayeSeg/2022,
-	title =	 {Joint Modeling of Image and Label Statistics for Enhancing Model Generalizability of Medical Image Segmentation},
-	author = {Gao, Shangqi and Zhou, Hangqi and Gao, Yibo and Zhuang, Xiahai},
-  journal = {	arXiv e-print, arXiv:2206.04336},
-  year = 2022
+@InProceedings{Gao/BayeSeg/2022,
+  author = {Gao, Shangqi and Zhou, Hangqi and Gao, Yibo and Zhuang, Xiahai},
+  title = {Joint Modeling of Image and Label Statistics for Enhancing Model Generalizability of Medical Image Segmentation},
+  booktile = {Medical Image Computing and Computer Assisted Intervention -- MICCAI 2022},
+  year = 2022,
+  publisher = {Springer Nature Switzerland},
+  pages = {360--369}
 }
 ```
 
